@@ -1,15 +1,14 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
+import Form from "./components/Form";
+import { Box, Container } from "@mui/material";
+import Header from "./components/Header";
+import Item from "./components/Item";
+import { useApp } from "./ThemedApp";
 
-import List from "./List";
-import Item from "./Item";
-import Form from "./Form";
-
-import { AppContext } from "./ThemedApp";
 
 export default function App() {
-	const { mode, setMode } = useContext(AppContext);
 
-	const [showForm, setShowForm] = useState(false);
+	const {showForm} = useApp();
 
 	const [data, setData] = useState([
 		{ id: 1, content: "Hello, World!", name: "Alice" },
@@ -27,69 +26,24 @@ export default function App() {
 	};
 
 	return (
-		<div
-			style={{
-				width: "100%",
-				minHeight: 1500,
-				background: mode === "dark" ? "black" : "white",
-				color: mode === "dark" ? "white" : "black",
-				paddingTop: 20,
-			}}>
-			<div style={{ maxWidth: 600, margin: "0 auto" }}>
-				<h1
-					style={{
-						display: "flex",
-						justifyContent: "space-between",
-						alignItems: "center",
-						margin: "0 0 20px 0",
-					}}>
-					Yaycha
-					<div>
-						<button
-							onClick={() => setShowForm(!showForm)}
-							style={{
-								width: 32,
-								height: 32,
-								borderRadius: 32,
-								border: "0 none",
-								background: showForm ? "#dc3545" : "#0d6efd",
-								color: "white",
-							}}>
-							{showForm ? "×" : "+"}
-						</button>
+		<Box>
+		<Header />
 
-						<button
-							onClick={() =>
-								setMode(mode === "dark" ? "light" : "dark")
-							}
-							style={{
-								marginLeft: 8,
-								padding: "0 20px",
-								height: 32,
-								borderRadius: 32,
-								border: "0 none",
-								background: mode === "dark" ? "#333" : "#ddd",
-								color: mode === "dark" ? "white" : "black",
-							}}>
-							{mode === "dark" ? "Light" : "Dark"}
-						</button>
-					</div>
-				</h1>
+		<Container
+			maxWidth="sm"
+			sx={{ mt: 4 }}>
+			{showForm && <Form add={add} />}
 
-				{showForm && <Form add={add} />}
-
-				<List>
-					{data.map(item => {
-						return (
-							<Item
-								key={item.id}
-								item={item}
-								remove={remove}
-							/>
-						);
-					})}
-				</List>
-			</div>
-		</div>
+			{data.map(item => {
+				return (
+					<Item
+						key={item.id}
+						item={item}
+						remove={remove}
+					/>
+				);
+			})}
+		</Container>
+	</Box>
 	);
 }
